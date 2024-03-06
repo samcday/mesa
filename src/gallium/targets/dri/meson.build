@@ -72,6 +72,7 @@ foreach d : [[with_gallium_kmsro, [
                'armada-drm_dri.so',
                'exynos_dri.so',
                'gm12u320_dri.so',
+               'gud_dri.so',
                'hdlcd_dri.so',
                'hx8357d_dri.so',
                'ili9163_dri.so',

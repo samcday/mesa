@@ -97,6 +97,13 @@ option(
 )
 
 option(
+  'gallium-kmsro',
+  type : 'boolean',
+  value : false,
+  description : 'Enable gallium kmsro',
+)
+
+option(
   'gallium-vdpau',
   type : 'feature',
   deprecated: {'true': 'enabled', 'false': 'disabled'},
