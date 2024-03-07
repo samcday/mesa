@@ -705,6 +705,17 @@ static bool si_texture_get_handle(struct pipe_screen *screen, struct pipe_contex
    ctx = threaded_context_unwrap_sync(ctx);
    sctx = ctx ? (struct si_context *)ctx : si_get_aux_context(&sscreen->aux_context.general);
 
+   if (whandle->type == WINSYS_HANDLE_TYPE_KMS && sscreen->ro) {
+      if (!res->scanout && (resource->bind & PIPE_BIND_SCANOUT)) {
+         res->scanout = renderonly_scanout_for_resource(resource, sscreen->ro, NULL);
+      }
+
+      if (!res->scanout)
+         return false;
+
+      return renderonly_get_handle(res->scanout, whandle);
+   }
+
    if (resource->target != PIPE_BUFFER) {
       unsigned plane = whandle->plane;
 

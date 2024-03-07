@@ -665,7 +665,8 @@ static struct pipe_resource *r600_resource_create(struct pipe_screen *screen,
 }
 
 struct pipe_screen *r600_screen_create(struct radeon_winsys *ws,
-				       const struct pipe_screen_config *config)
+				       const struct pipe_screen_config *config,
+                                       struct renderonly *ro)
 {
 	struct r600_screen *rscreen = CALLOC_STRUCT(r600_screen);
 

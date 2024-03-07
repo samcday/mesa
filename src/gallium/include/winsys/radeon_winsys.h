@@ -27,6 +27,7 @@
 #include "amd/common/ac_gpu_info.h"
 #include "amd/common/ac_surface.h"
 #include "pipebuffer/pb_buffer.h"
+#include "renderonly/renderonly.h"
 
 /* Tiling flags. */
 enum radeon_bo_layout
@@ -948,14 +949,15 @@ static inline int radeon_get_heap_index(enum radeon_bo_domain domain, enum radeo
 }
 
 typedef struct pipe_screen *(*radeon_screen_create_t)(struct radeon_winsys *,
-                                                      const struct pipe_screen_config *);
+                                                      const struct pipe_screen_config *,
+                                                      struct renderonly *ro);
 
 /* These functions create the radeon_winsys instance for the corresponding kernel driver. */
 struct radeon_winsys *
-amdgpu_winsys_create(int fd, const struct pipe_screen_config *config,
+amdgpu_winsys_create(int fd, const struct pipe_screen_config *config, struct renderonly *ro,
 		     radeon_screen_create_t screen_create);
 struct radeon_winsys *
-radeon_drm_winsys_create(int fd, const struct pipe_screen_config *config,
+radeon_drm_winsys_create(int fd, const struct pipe_screen_config *config, struct renderonly *ro,
 			 radeon_screen_create_t screen_create);
 
 #endif

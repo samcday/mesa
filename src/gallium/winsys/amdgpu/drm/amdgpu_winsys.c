@@ -17,6 +17,8 @@
 #include "util/thread_sched.h"
 #include "util/xmlconfig.h"
 #include "drm-uapi/amdgpu_drm.h"
+#include "amdgpu_drm_public.h"
+#include "radeonsi/si_public.h"
 #include <xf86drm.h>
 #include <stdio.h>
 #include <sys/stat.h>
@@ -356,7 +358,7 @@ amdgpu_drm_winsys_get_fd(struct radeon_winsys *rws)
 }
 
 PUBLIC struct radeon_winsys *
-amdgpu_winsys_create(int fd, const struct pipe_screen_config *config,
+amdgpu_winsys_create(int fd, const struct pipe_screen_config *config, struct renderonly *ro,
 		     radeon_screen_create_t screen_create)
 {
    struct amdgpu_screen_winsys *ws;
@@ -538,7 +540,7 @@ amdgpu_winsys_create(int fd, const struct pipe_screen_config *config,
     *
     * Alternatively, we could create the screen based on "ws->gen"
     * and link all drivers into one binary blob. */
-   ws->base.screen = screen_create(&ws->base, config);
+   ws->base.screen = screen_create(&ws->base, config, ro);
    if (!ws->base.screen) {
       amdgpu_winsys_destroy_locked(&ws->base, true);
       simple_mtx_unlock(&dev_tab_mutex);
@@ -562,4 +564,10 @@ fail:
    FREE(ws);
    simple_mtx_unlock(&dev_tab_mutex);
    return NULL;
+}
+
+struct pipe_screen *
+amdgpu_drm_screen_create_renderonly(int fd, struct renderonly *ro,
+                                   const struct pipe_screen_config *config) {
+   return radeonsi_screen_create(fd, config, ro);
 }

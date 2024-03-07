@@ -26,7 +26,7 @@ libamdgpuwinsys = static_library(
     'amdgpu_winsys.h',
   ),
   include_directories : [
-    inc_amd, inc_gallium, inc_gallium_aux, inc_include, inc_src,
+    inc_amd, inc_gallium, inc_gallium_aux, inc_gallium_drivers, inc_include, inc_src,
     inc_amd_common, inc_amd_common_llvm,
   ],
   gnu_symbol_visibility : 'hidden',

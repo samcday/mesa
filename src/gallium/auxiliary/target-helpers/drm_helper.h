@@ -68,6 +68,7 @@ const struct drm_driver_descriptor descriptor_name = {         \
 #undef GALLIUM_PANFROST
 #undef GALLIUM_LIMA
 #undef GALLIUM_ASAHI
+#undef GALLIUM_RADEONSI
 #endif
 
 #ifdef GALLIUM_I915
@@ -165,7 +166,7 @@ pipe_r300_create_screen(int fd, const struct pipe_screen_config *config)
 {
    struct radeon_winsys *rw;
 
-   rw = radeon_drm_winsys_create(fd, config, r300_screen_create);
+   rw = radeon_drm_winsys_create(fd, config, NULL, r300_screen_create);
    return rw ? debug_screen_wrap(rw->screen) : NULL;
 }
 DRM_DRIVER_DESCRIPTOR(r300, NULL, 0)
@@ -183,7 +184,7 @@ pipe_r600_create_screen(int fd, const struct pipe_screen_config *config)
 {
    struct radeon_winsys *rw;
 
-   rw = radeon_drm_winsys_create(fd, config, r600_screen_create);
+   rw = radeon_drm_winsys_create(fd, config, NULL, r600_screen_create);
    return rw ? debug_screen_wrap(rw->screen) : NULL;
 }
 DRM_DRIVER_DESCRIPTOR(r600, NULL, 0)
@@ -198,7 +199,7 @@ DRM_DRIVER_DESCRIPTOR_STUB(r600)
 static struct pipe_screen *
 pipe_radeonsi_create_screen(int fd, const struct pipe_screen_config *config)
 {
-   struct pipe_screen *screen = radeonsi_screen_create(fd, config);
+   struct pipe_screen *screen = radeonsi_screen_create(fd, config, NULL);
 
    return screen ? debug_screen_wrap(screen) : NULL;
 }

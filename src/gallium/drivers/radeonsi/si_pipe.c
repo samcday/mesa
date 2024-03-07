@@ -1160,7 +1160,8 @@ static bool si_is_parallel_shader_compilation_finished(struct pipe_screen *scree
 }
 
 static struct pipe_screen *radeonsi_screen_create_impl(struct radeon_winsys *ws,
-                                                       const struct pipe_screen_config *config)
+                                                       const struct pipe_screen_config *config,
+                                                       struct renderonly *ro)
 {
    struct si_screen *sscreen = CALLOC_STRUCT(si_screen);
    unsigned hw_threads, num_comp_hi_threads, num_comp_lo_threads;
@@ -1178,6 +1179,7 @@ static struct pipe_screen *radeonsi_screen_create_impl(struct radeon_winsys *ws,
 #include "si_debug_options.h"
    }
 
+   sscreen->ro = ro;
    sscreen->ws = ws;
    ws->query_info(ws, &sscreen->info);
 
@@ -1541,7 +1543,7 @@ static struct pipe_screen *radeonsi_screen_create_impl(struct radeon_winsys *ws,
    return &sscreen->b;
 }
 
-struct pipe_screen *radeonsi_screen_create(int fd, const struct pipe_screen_config *config)
+struct pipe_screen *radeonsi_screen_create(int fd, const struct pipe_screen_config *config, struct renderonly *ro)
 {
    struct radeon_winsys *rw = NULL;
    drmVersionPtr version;
@@ -1565,16 +1567,17 @@ struct pipe_screen *radeonsi_screen_create(int fd, const struct pipe_screen_conf
 
    switch (version->version_major) {
    case 2:
-      rw = radeon_drm_winsys_create(fd, config, radeonsi_screen_create_impl);
+      rw = radeon_drm_winsys_create(fd, config, ro, radeonsi_screen_create_impl);
       break;
    case 3:
-      rw = amdgpu_winsys_create(fd, config, radeonsi_screen_create_impl);
+      rw = amdgpu_winsys_create(fd, config, ro, radeonsi_screen_create_impl);
       break;
    }
 
    si_driver_ds_init();
 
    drmFreeVersion(version);
+
    return rw ? rw->screen : NULL;
 }
 

@@ -324,6 +324,7 @@ struct si_resource {
    /* Winsys objects. */
    struct pb_buffer_lean *buf;
    uint64_t gpu_address;
+   struct renderonly_scanout *scanout;
 
    /* Resource properties. */
    uint64_t bo_size;
@@ -550,6 +551,7 @@ struct si_aux_context {
 struct si_screen {
    struct pipe_screen b;
    struct radeon_winsys *ws;
+   struct renderonly *ro;
    struct disk_cache *disk_shader_cache;
 
    struct radeon_info info;

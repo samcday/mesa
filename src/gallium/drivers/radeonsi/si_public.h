@@ -7,9 +7,11 @@
 #ifndef SI_PUBLIC_H
 #define SI_PUBLIC_H
 
+#include "renderonly/renderonly.h"
+
 struct pipe_screen;
 struct pipe_screen_config;
 
-struct pipe_screen *radeonsi_screen_create(int fd, const struct pipe_screen_config *config);
+struct pipe_screen *radeonsi_screen_create(int fd, const struct pipe_screen_config *config, struct renderonly *ro);
 
 #endif
